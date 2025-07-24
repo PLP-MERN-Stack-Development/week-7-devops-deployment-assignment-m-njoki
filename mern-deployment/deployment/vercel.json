@@ -1,0 +1,46 @@
+{
+  "version": 2,
+  "name": "mern-frontend",
+  "builds": [
+    {
+      "src": "client/package.json",
+      "use": "@vercel/node",
+      "config": { "distDir": "build" }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "headers": { "cache-control": "s-maxage=31536000,immutable" },
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/service-worker.js",
+      "headers": { "cache-control": "s-maxage=0" },
+      "dest": "/service-worker.js"
+    },
+    {
+      "src": "/sockjs-node/(.*)",
+      "dest": "/sockjs-node/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/client/build/index.html"
+    }
+  ],
+  "env": {
+    "REACT_APP_API_URL": "@react_app_api_url",
+    "REACT_APP_ENVIRONMENT": "production"
+  },
+  "build": {
+    "env": {
+      "REACT_APP_API_URL": "@react_app_api_url",
+      "REACT_APP_ENVIRONMENT": "production"
+    }
+  },
+  "functions": {
+    "client/build/**": {
+      "includeFiles": "client/build/**"
+    }
+  }
+}

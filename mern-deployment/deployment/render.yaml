@@ -1,0 +1,31 @@
+# Render Deployment Configuration
+# Place this file as render.yaml in your repository root
+
+services:
+  - type: web
+    name: mern-backend
+    env: node
+    plan: free
+    buildCommand: cd server && npm install && npm run build
+    startCommand: cd server && npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URI
+        fromSecret: MONGODB_URI
+      - key: JWT_SECRET
+        fromSecret: JWT_SECRET
+      - key: CORS_ORIGIN
+        fromSecret: CORS_ORIGIN
+    autoDeploy: true
+    branch: main
+    repo: https://github.com/your-username/your-repo-name
+
+databases:
+  - name: mongodb-atlas
+    databaseName: production_db
+    user: admin
+    plan: free
